@@ -1,14 +1,14 @@
-var express = require('express');
-const songs = require('../mocks/songs');
+var express = require("express");
 var router = express.Router();
+const songController = require("../controllers/song.controller");
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.json(songs);
-});
+router.get("/", songController.findAll);
 
-router.get('/:id', function(req, res, next) {
-    res.json(songs[0]);
-  });
-  
+router.get("/:id", songController.findById);
+
+router.post("/", songController.create);
+
+router.delete("/:id", songController.delete);
+
 module.exports = router;
