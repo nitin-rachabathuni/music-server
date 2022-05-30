@@ -2,14 +2,28 @@ const Song = require("../models/songs.model");
 
 exports.findAll = function (req, res) {
   Song.findAll(function (err, song) {
-    console.log("controller");
     if (err) res.send(err);
-    console.log("res", song);
     res.json(song);
   });
 };
 
 exports.create = function (req, res) {
+  // if (!req.body.image) {
+  //   return res.status(500).send({ msg: "file is not found" });
+  // }
+  // // accessing the file
+  // const myFile = req.body.image;
+
+  // //  mv() method places the file inside public directory
+  // myFile.mv(`${__dirname}/public/${myFile.name}`, function (err) {
+  //   if (err) {
+  //     console.log(err);
+  //     return res.status(500).send({ msg: "Error occured" });
+  //   }
+  //   // returing the response with file path and name
+  //   // return res.send({ name: myFile.name, path: `/${myFile.name}` });
+  //   req.body.image = `/${myFile.name}`;
+  // });
   const newSong = new Song(req.body);
   //handles null error
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
