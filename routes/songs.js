@@ -9,6 +9,8 @@ router.get("/:id", songController.findById);
 
 router.post("/", songController.create);
 
+router.put("/", songController.update);
+
 router.delete("/:id", songController.delete);
 
 module.exports = router;

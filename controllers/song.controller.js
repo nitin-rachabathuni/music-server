@@ -42,8 +42,41 @@ exports.create = function (req, res) {
   }
 };
 
+exports.update = function (req, res) {
+  const newSong = new Song(req.body);
+  //handles null error
+  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+    res
+      .status(400)
+      .send({ error: true, message: "Please provide all required field" });
+  } else {
+    Song.update(req.body.id, newSong, function (err, song) {
+      if (err) res.send(err);
+      res.json({
+        error: false,
+        message: "Song updated successfully!",
+        data: song,
+      });
+    });
+  }
+};
+
 exports.findById = function (req, res) {
   Song.findById(req.params.id, function (err, song) {
+    if (err) res.send(err);
+    res.json(song);
+  });
+};
+
+exports.findByAlbum = function (req, res) {
+  Song.findAlbums(function (err, albums) {
+    if (err) res.send(err);
+    res.json(albums);
+  });
+};
+
+exports.findSongsByAlbum = function (req, res) {
+  Song.findSongs(req.params.album, function (err, song) {
     if (err) res.send(err);
     res.json(song);
   });

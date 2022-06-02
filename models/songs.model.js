@@ -7,6 +7,8 @@ var Song = function (song) {
   this.duration = song.duration;
   this.image = song.image;
   this.artist = song.artist;
+  this.album = song.album;
+  this.fav = song.fav;
   this.created_date = new Date();
 };
 
@@ -32,7 +34,30 @@ Song.findById = function (id, result) {
 
 Song.findAll = function (result) {
   dbConn.query(
-    "Select id,name,artist,duration,image,created_date from songs",
+    "Select id,name,artist,url,duration,image,album,created_date from songs",
+    function (err, res) {
+      if (err) {
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Song.findAlbums = function (result) {
+  dbConn.query("Select album from songs group by album", function (err, res) {
+    if (err) {
+      result(null, err);
+    } else {
+      result(null, res);
+    }
+  });
+};
+
+Song.findSongs = function (album, result) {
+  dbConn.query(
+    `Select * from songs where album = "${album}"`,
     function (err, res) {
       if (err) {
         result(null, err);
@@ -45,8 +70,16 @@ Song.findAll = function (result) {
 
 Song.update = function (id, song, result) {
   dbConn.query(
-    "UPDATE songs SET name=?,url=?,image=?,artist=? WHERE id = ?",
-    [song.name, song.url, song.image, song.artist, id],
+    "UPDATE songs SET name=?,url=?,image=?,artist=?,album=?,duration=? WHERE id = ?",
+    [
+      song.name,
+      song.url,
+      song.image,
+      song.artist,
+      song.album,
+      song.duration,
+      id,
+    ],
     function (err, res) {
       if (err) {
         result(null, err);
