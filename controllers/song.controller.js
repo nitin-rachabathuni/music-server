@@ -61,6 +61,25 @@ exports.update = function (req, res) {
   }
 };
 
+exports.updateFav = function (req, res) {
+  //handles null error
+  Song.updateFav(req.body, function (err, song) {
+    if (err) res.send(err);
+    res.json({
+      error: false,
+      message: "Song Favourite updated",
+      data: song,
+    });
+  });
+};
+
+exports.getFav = function (req, res) {
+  Song.getFav(function (err, song) {
+    if (err) res.send(err);
+    res.json(song);
+  });
+};
+
 exports.findById = function (req, res) {
   Song.findById(req.params.id, function (err, song) {
     if (err) res.send(err);

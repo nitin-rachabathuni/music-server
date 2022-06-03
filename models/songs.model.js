@@ -34,7 +34,20 @@ Song.findById = function (id, result) {
 
 Song.findAll = function (result) {
   dbConn.query(
-    "Select id,name,artist,url,duration,image,album,created_date from songs",
+    "Select id,name,artist,url,duration,image,album,fav,created_date from songs",
+    function (err, res) {
+      if (err) {
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Song.getFav = function (result) {
+  dbConn.query(
+    "Select id,name,artist,url,duration,image,album,fav,created_date from songs where fav = 1",
     function (err, res) {
       if (err) {
         result(null, err);
@@ -80,6 +93,20 @@ Song.update = function (id, song, result) {
       song.duration,
       id,
     ],
+    function (err, res) {
+      if (err) {
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Song.updateFav = function (song, result) {
+  dbConn.query(
+    "UPDATE songs SET fav=? WHERE id = ?",
+    [song.fav, song.id],
     function (err, res) {
       if (err) {
         result(null, err);
